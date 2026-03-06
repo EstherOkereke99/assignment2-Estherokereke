@@ -24,16 +24,39 @@
 // 2. The mixin should take one parameter: $color.
 // 3. Replace the hard-coded color (#ffefd5) in the gradient with $color.
 // 4. Use @include syrup-layer(...) inside .syrup.
-.syrup {
-  position: relative;
-  transform: translateY(400%);
+// 1) Create a mixin named `syrup-layer` that takes one parameter: $color
+@mixin syrup-layer($color) {
   background: repeating-linear-gradient(
     45deg,
     white,
     white 10px,
-    #ffefd5 10px,
-    #ffefd5 20px
+    #{$color} 10px,
+    #{$color} 20px
   );
+}
+
+// 2) Use @include syrup-layer(...) inside .syrup.
+.syrup {
+  position: relative;
+  transform: translateY(400%);
+
+  /* default (in case JS hasn't run yet) */
+  --syrup-color: #ffefd5;
+
+  @include syrup-layer(var(--syrup-color));
+
+  width: 100%;
+  height: 20%;
+  animation: pour-layer 2s 1s forwards;
+  z-index: 2;
+}
+
+.syrup {
+  position: relative;
+  transform: translateY(400%);
+
+  @include syrup-layer(var(--syrup-color, #FFEFD5));
+
   width: 100%;
   height: 20%;
   animation: pour-layer 2s 1s forwards;
